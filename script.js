@@ -1,4 +1,3 @@
-//link to the api
 document.addEventListener('DOMContentLoaded', () => {
   const API_KEY = '4fd186b10fe65f080443247342f9cc5c';
   const BASE_URL = 'https://api.themoviedb.org/3';
@@ -8,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.getElementById('searchBtn');
   const moviesDiv = document.getElementById('movies');
 
-  // Fetch and display movies
   async function fetchMovies(query = 'avengers', sort = 'popularity.desc') {
     const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&sort_by=${sort}`;
     try {
@@ -25,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Render movie cards
   function displayMovies(movies) {
     moviesDiv.innerHTML = '';
     movies.forEach(movie => {
@@ -46,6 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
+      // 🔥 Add click listener to record history
+      movieDiv.addEventListener('click', () => {
+        updateSearchHistory(movie.title);
+      });
+
       moviesDiv.appendChild(movieDiv);
     });
   }
@@ -56,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return { query, sort };
   }
 
-  // Event listeners for search input and sorting
   searchInput.addEventListener('input', () => {
     const { query, sort } = getQueryAndSort();
     fetchMovies(query, sort);
@@ -72,10 +73,41 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMovies(query, sort);
   });
 
-  // Initial movie load
   fetchMovies();
 
-//login functionality
+  async function fetchUserData() {
+    try {
+      const response = await fetch('http://localhost:3001/api/users');
+      const data = await response.json();
+      console.log('Users from MySQL:', data);
+
+      data.forEach(user => {
+        console.log(`Name: ${user.name}, Email: ${user.email || 'No email provided'}`);
+      });
+
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  }
+
+  async function updateSearchHistory(movieTitle) {
+    try {
+      const userId = localStorage.getItem('userId');
+      if (!userId) return;
+
+      await fetch('http://localhost:3001/api/update-history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, movieTitle })
+      });
+    } catch (err) {
+      console.error('Failed to update search history:', err);
+    }
+  }
+
+  fetchUserData();
+
+  // login
   const loginModal = document.getElementById('loginModal');
   const loginTrigger = document.getElementById('loginTrigger');
   const closeLogin = document.getElementById('closeLogin');
@@ -99,9 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const username = document.getElementById('username').value;
     alert(`Welcome, ${username}!`);
     loginModal.style.display = 'none';
+    localStorage.setItem('userId', '1'); // 🔧 Replace '1' with actual ID from server logic
   });
 
-//sign up functionality
+  // signup
   const signupModal = document.getElementById('signupModal');
   const signupTrigger = document.getElementById('signupTrigger');
   const closeSignup = document.getElementById('closeSignup');
