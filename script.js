@@ -12,151 +12,116 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(url);
       const data = await res.json();
-      if (data.results && data.results.length > 0) {
-        displayMovies(data.results);
-      } else {
-        moviesDiv.innerHTML = `<p class="error">No movies found for "${query}".</p>`;
-      }
+      moviesDiv.innerHTML = data.results.length
+        ? data.results.map(movieCardHTML).join('')
+        : `<p class="error">No movies found for "${query}".</p>`;
+
+      document.querySelectorAll('.movie-card').forEach((card, index) => {
+        card.addEventListener('click', () => {
+          const movie = data.results[index];
+          const movieData = {
+            title: movie.title,
+            id: movie.id,
+            posterPath: movie.poster_path,
+            overview: movie.overview
+          };
+          openMovieModal(movieData);
+          updateSearchHistory(movieData.title, movieData.id);
+        });
+      });
+
     } catch (err) {
       console.error('Failed to fetch movies:', err);
       moviesDiv.innerHTML = `<p class="error">Error loading movies. Please try again later.</p>`;
     }
   }
 
-  function displayMovies(movies) {
-    moviesDiv.innerHTML = '';
-    movies.forEach(movie => {
-      const movieDiv = document.createElement('div');
-      movieDiv.className = 'movie-card';
-
-      const posterPath = movie.poster_path
-        ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-        : 'https://via.placeholder.com/200x300?text=No+Image';
-
-      movieDiv.innerHTML = `
+  function movieCardHTML(movie) {
+    const posterPath = movie.poster_path
+      ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+      : 'https://via.placeholder.com/200x300?text=No+Image';
+    return `
+      <div class="movie-card">
         <img src="${posterPath}" alt="${movie.title}" class="poster">
         <div class="movie-info">
           <h3>${movie.title}</h3>
           <p><strong>Release:</strong> ${movie.release_date || 'N/A'}</p>
           <p><strong>Popularity:</strong> ${movie.popularity}</p>
-          <p>${movie.overview}</p>
+          <p>${movie.overview || 'No description available.'}</p>
         </div>
-      `;
-
-      // 🔥 Add click listener to record history
-      movieDiv.addEventListener('click', () => {
-        updateSearchHistory(movie.title);
-      });
-
-      moviesDiv.appendChild(movieDiv);
-    });
+      </div>
+    `;
   }
 
-  function getQueryAndSort() {
+  function handleMovieSearch() {
     const query = searchInput.value.trim() || 'avengers';
     const sort = sortOptions.value;
-    return { query, sort };
+    fetchMovies(query, sort);
   }
 
-  searchInput.addEventListener('input', () => {
-    const { query, sort } = getQueryAndSort();
-    fetchMovies(query, sort);
-  });
-
-  sortOptions.addEventListener('change', () => {
-    const { query, sort } = getQueryAndSort();
-    fetchMovies(query, sort);
-  });
-
-  searchBtn.addEventListener('click', () => {
-    const { query, sort } = getQueryAndSort();
-    fetchMovies(query, sort);
-  });
+  if (searchInput) searchInput.addEventListener('input', handleMovieSearch);
+  if (sortOptions) sortOptions.addEventListener('change', handleMovieSearch);
+  if (searchBtn) searchBtn.addEventListener('click', handleMovieSearch);
 
   fetchMovies();
 
-  async function fetchUserData() {
-    try {
-      const response = await fetch('http://localhost:3001/api/users');
-      const data = await response.json();
-      console.log('Users from MySQL:', data);
-
-      data.forEach(user => {
-        console.log(`Name: ${user.name}, Email: ${user.email || 'No email provided'}`);
-      });
-
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  }
-
-  async function updateSearchHistory(movieTitle) {
+  async function updateSearchHistory(movieTitle, movieId) {
     try {
       const userId = localStorage.getItem('userId');
       if (!userId) return;
 
-      await fetch('http://localhost:3001/api/update-history', {
+      await fetch('update_history.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, movieTitle })
+        body: JSON.stringify({ userId, movieTitle, movieId })
       });
     } catch (err) {
       console.error('Failed to update search history:', err);
     }
   }
 
-  fetchUserData();
+  function openMovieModal(movie) {
+    const movieModal = document.getElementById('movieModal');
+    if (!movieModal) return;
 
-  // login
-  const loginModal = document.getElementById('loginModal');
-  const loginTrigger = document.getElementById('loginTrigger');
-  const closeLogin = document.getElementById('closeLogin');
+    const posterUrl = movie.posterPath
+      ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
+      : 'https://via.placeholder.com/200x300?text=No+Image';
 
-  loginTrigger.addEventListener('click', () => {
-    loginModal.style.display = 'block';
-  });
+    movieModal.innerHTML = `
+      <div class="modal-content movie-modal">
+        <span class="close-button" id="closeMovieModal">&times;</span>
 
-  closeLogin.addEventListener('click', () => {
-    loginModal.style.display = 'none';
-  });
+        <div class="fake-player">
+          <div class="play-icon">&#9658;</div>
+        </div>
+
+        <div class="movie-details">
+          <img src="${posterUrl}" alt="Movie Poster" class="modal-poster" />
+          <h2>${movie.title}</h2>
+          <p>${movie.overview || 'No description available.'}</p>
+
+          <button id="commentBtn" class="comment-btn">Comment</button>
+        </div>
+      </div>
+    `;
+
+    movieModal.style.display = 'block';
+
+    document.getElementById('closeMovieModal').onclick = () => {
+      movieModal.style.display = 'none';
+    };
+
+    document.getElementById('commentBtn').onclick = () => {
+      window.location.href = `comments.html?movieId=${movie.id}&title=${encodeURIComponent(movie.title)}`;
+    };
+  }
 
   window.addEventListener('click', (e) => {
-    if (e.target === loginModal) {
-      loginModal.style.display = 'none';
+    const movieModal = document.getElementById('movieModal');
+    if (e.target === movieModal) {
+      movieModal.style.display = 'none';
     }
   });
 
-  document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    alert(`Welcome, ${username}!`);
-    loginModal.style.display = 'none';
-    localStorage.setItem('userId', '1'); // 🔧 Replace '1' with actual ID from server logic
-  });
-
-  // signup
-  const signupModal = document.getElementById('signupModal');
-  const signupTrigger = document.getElementById('signupTrigger');
-  const closeSignup = document.getElementById('closeSignup');
-
-  signupTrigger.addEventListener('click', () => {
-    signupModal.style.display = 'block';
-  });
-
-  closeSignup.addEventListener('click', () => {
-    signupModal.style.display = 'none';
-  });
-
-  window.addEventListener('click', (e) => {
-    if (e.target === signupModal) {
-      signupModal.style.display = 'none';
-    }
-  });
-
-  document.getElementById('signupForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const newUser = document.getElementById('newUsername').value;
-    alert(`Thanks for signing up, ${newUser}!`);
-    signupModal.style.display = 'none';
-  });
 });

@@ -1,4 +1,4 @@
-/* Base Reset & Body*/
+/* Base Reset & Body */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,7 +12,7 @@ body {
   line-height: 1.6;
 }
 
-/* Header & Footer*/
+/* Header & Footer */
 .site-header {
   background-color: #141414;
   color: #fff;
@@ -40,13 +40,14 @@ body {
   font-size: 0.9em;
 }
 
-/*Main Container */
+/* Main Container */
 .container {
   max-width: 1000px;
   margin: 30px auto;
   padding: 0 20px;
 }
 
+/* Search Controls */
 .search-controls {
   display: flex;
   flex-direction: column;
@@ -63,9 +64,13 @@ body {
 }
 
 /* Form Elements */
-input[type="text"] {
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   flex: 1;
+  width: 100%;
   padding: 10px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -92,13 +97,14 @@ select {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
   padding: 10px;
   align-items: center;
 }
 
 .movie-card:hover {
   background: #f9f9f9;
+  transform: scale(1.02);
 }
 
 .movie-card img {
@@ -121,7 +127,7 @@ select {
   margin: 5px 0;
 }
 
-/* Modals (Login / Signup)*/
+/* Modals (Login / Signup / Movie) */
 .modal {
   display: none;
   position: fixed;
@@ -130,19 +136,26 @@ select {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0,0,0,0.8);
 }
 
 .modal-content {
   background-color: #fff;
-  margin: 10% auto;
+  margin: 5% auto;
   padding: 20px;
-  width: 80%;
-  max-width: 600px;
-  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 10px;
   position: relative;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  animation: fadeIn 0.5s;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 
 .close-button {
   color: #aaa;
@@ -158,18 +171,22 @@ select {
   color: #e50914;
 }
 
-.login-form {
+/* Login/Signup Forms */
+.login-form,
+.signup-form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.login-form h2 {
+.login-form h2,
+.signup-form h2 {
   margin-bottom: 20px;
   color: #141414;
 }
 
-.login-form input {
+.login-form input,
+.signup-form input {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
@@ -177,23 +194,28 @@ select {
   border: 1px solid #ccc;
 }
 
-.login-form button {
-  padding: 10px 20px;
+.login-form button,
+.signup-form button {
+  width: 100%;
+  padding: 12px;
   background-color: #e50914;
   color: white;
   border: none;
   border-radius: 4px;
   font-weight: bold;
+  font-size: 1em;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-.login-form button:hover {
+
+.login-form button:hover,
+.signup-form button:hover {
   background-color: #c40611;
 }
 
-/* Buttons */
-#searchBtn,
-.login-btn {
+/* My Account Button */
+#myAccountBtn {
   padding: 8px 16px;
   background-color: #e50914;
   color: white;
@@ -204,24 +226,147 @@ select {
   transition: background 0.3s;
 }
 
-#searchBtn:hover,
-.login-btn:hover {
+#myAccountBtn:hover {
   background-color: #c40611;
 }
 
+/* Optional: Position it nicely on top right if you want */
 .auth-buttons {
   text-align: center;
   margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
-.auth-buttons .login-btn {
-  margin: 0 10px;
+.form-group {
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-/*Floating login button */
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* Success and Error Messages */
+.message {
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Footer links */
+.form-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.form-footer a {
+  color: #e50914;
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
+#searchBtn,
+.login-btn,
+.signup-btn,
+.comment-btn {
+  padding: 10px 20px;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+#searchBtn:hover,
+.login-btn:hover,
+.signup-btn:hover,
+.comment-btn:hover {
+  background-color: #c40611;
+}
+
+/* Floating Login Button */
 .fixed-login-btn {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 1000;
+}
+
+/* Movie Modal (Popup Player) */
+.movie-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fake-player {
+  width: 90%;
+  max-width: 960px;
+  height: 540px;
+  background-color: #000;
+  margin: 20px auto;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+}
+
+.play-icon {
+  color: white;
+  font-size: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.movie-details {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.modal-poster {
+  width: 220px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.movie-details h2 {
+  margin: 15px 0 10px;
+  font-size: 1.8em;
+  color: #141414;
+}
+
+.movie-details p {
+  font-size: 1em;
+  margin-bottom: 15px;
+  color: #666;
+  padding: 0 20px;
 }

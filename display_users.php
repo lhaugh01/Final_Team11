@@ -1,40 +1,92 @@
 <?php
-$host = '35.212.125.126';
-$port = '3306';
-$dbname = 'dbs5nqdmdcgi92';
-$user = 'uxj34ztsgesvj';
-$pass = 'tufts12345#';
+// display_users.php
 
-try {
-    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
-    $pdo = new PDO($dsn, $user, $pass);
+require_once 'connection.php'; // This already creates $conn (mysqli)
 
-    // Set error mode
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$sql = "SELECT * FROM users";
 
-    // Query to fetch all users
-    $stmt = $pdo->query("SELECT * FROM users");
+$result = $conn->query($sql);
 
-    echo "<h1>All Users</h1>";
-    echo "<table border='1' cellpadding='10'>";
-    echo "<tr>";
-    for ($i = 0; $i < $stmt->columnCount(); $i++) {
-        $col = $stmt->getColumnMeta($i);
-        echo "<th>" . htmlspecialchars($col['name']) . "</th>";
-    }
-    echo "</tr>";
-
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<tr>";
-        foreach ($row as $val) {
-            echo "<td>" . htmlspecialchars($val) . "</td>";
-        }
-        echo "</tr>";
-    }
-
-    echo "</table>";
-
-} catch (PDOException $e) {
-    echo "Database error: " . $e->getMessage();
-}
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Users</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #141414;
+      color: white;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .back-home {
+      display: block;
+      margin: 30px auto;
+      text-align: center;
+      font-size: 1.2em;
+      text-decoration: none;
+      color: #e50914;
+      font-weight: bold;
+    }
+    .back-home:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<h1>All Registered Users</h1>
+
+<?php if ($result && $result->num_rows > 0): ?>
+<table>
+  <tr>
+    <?php
+    // Output table header
+    while ($fieldinfo = $result->fetch_field()) {
+        echo "<th>" . htmlspecialchars($fieldinfo->name) . "</th>";
+    }
+    ?>
+  </tr>
+
+  <?php while ($row = $result->fetch_assoc()): ?>
+    <tr>
+      <?php foreach ($row as $val): ?>
+        <td><?php echo htmlspecialchars($val); ?></td>
+      <?php endforeach; ?>
+    </tr>
+  <?php endwhile; ?>
+
+</table>
+<?php else: ?>
+  <p style="text-align: center;">No users found.</p>
+<?php endif; ?>
+
+<a href="index.html" class="back-home">← Back to Home</a>
+
+</body>
+</html>
