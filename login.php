@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
-            $_SESSION['userId'] = $user['id']; // Save user id to PHP session
+            $_SESSION['userId'] = $user['id'];
             header('Location: redirect_after_login.php');
             exit;
         } else {
@@ -34,11 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <title>Login - NetView</title>
   <link rel="stylesheet" href="styles.css">
@@ -46,16 +44,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <body>
 
 <header class="site-header">
-  <div style="padding-left: 20px;"> <!-- Shift logo slightly right -->
-    <a href="index.html" class="logo">
-      <img src="logo.png" alt="NetView Logo" class="logo-img">
-    </a>
+  <div class="nav-bar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo.png" alt="NetView Logo" class="logo-img">
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="account.php" class="nav-btn">My Account</a>
+      <a href="display_users.php" class="nav-btn">Admin</a>
+    </div>
   </div>
-
-  
 </header>
 
-<div class="container">
+<div class="container" style="margin-top: 80px;">
 
   <?php if (!empty($login_error)): ?>
     <div class="message error"><?php echo htmlspecialchars($login_error); ?></div>

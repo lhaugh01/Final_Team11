@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Donate - NetView</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Tiny extra improvement for inputs */
+    #cardNumber, #expiryDate, #cvv, #donorName, #donationAmount {
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-bar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo.png" alt="NetView Logo">
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="about.html" class="nav-btn">About Us</a>
+      <a href="donate.html" class="nav-btn">Donate</a>
+      <a href="account.php" class="nav-btn">My Account</a>
+      <a href="display_users.php" class="nav-btn">Admin</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <h2 style="text-align:center; margin-bottom: 20px;">Support NetView!</h2>
+
+  <p style="text-align:center; max-width: 600px; margin: 0 auto 30px; color: #ccc; font-size: 1.1em;">
+    NetView is a non-profit website run by volunteers. Your donations help us cover server costs, website maintenance, and improvements. Thank you for supporting our mission!
+  </p>
+
+  <form style="max-width: 400px; margin: 0 auto; background-color: #111; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.6);">
+    
+    <div class="form-group" style="margin-bottom: 15px;">
+      <label for="donorName" style="font-weight:bold;">Your Name</label>
+      <input type="text" id="donorName" name="donorName" placeholder="Enter your name" required>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+      <label for="cardNumber" style="font-weight:bold;">Card Number</label>
+      <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+    </div>
+
+    <div class="form-group" style="display: flex; gap: 10px; margin-bottom: 15px;">
+      <div style="flex:1;">
+        <label for="expiryDate" style="font-weight:bold;">Expiry Date</label>
+        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
+      </div>
+
+      <div style="flex:1;">
+        <label for="cvv" style="font-weight:bold;">CVV</label>
+        <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+      <label for="donationAmount" style="font-weight:bold;">Donation Amount ($)</label>
+      <input type="number" id="donationAmount" name="donationAmount" placeholder="Enter amount" min="1" required>
+    </div>
+
+    <button type="submit" class="signup-btn" style="width:100%; margin-top:10px;">Donate Now</button>
+  </form>
+
+  <p style="text-align:center; margin-top:30px; color:#ccc;">Every donation, big or small, makes a difference. Thank you!</p>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2025 NetView | All Rights Reserved</p>
+</footer>
+
+<script>
+  // Format Card Number while typing
+  const cardNumberInput = document.getElementById('cardNumber');
+  cardNumberInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '').substring(0,16);
+    let formattedValue = value.match(/.{1,4}/g)?.join(' ') || '';
+    e.target.value = formattedValue;
+  });
+
+  // Format Expiry Date while typing
+  const expiryDateInput = document.getElementById('expiryDate');
+  expiryDateInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '').substring(0,4);
+    if (value.length > 2) {
+      value = value.substring(0,2) + '/' + value.substring(2);
+    }
+    e.target.value = value;
+  });
+</script>
+
+</body>
+</html>
