@@ -95,7 +95,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
           <input type="text" name="username" placeholder="Admin Username" required><br>
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
-          <a href="/" class="back-home-button">← Back to Home Page</a>
+          <a href="index.html" class="back-home-button">← Back to Home Page</a>
         </form>
       </div>
     </body>
