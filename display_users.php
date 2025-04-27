@@ -73,6 +73,16 @@ if (!isset($_SESSION['admin_logged_in'])) {
           color: #ff6666;
           margin-bottom: 10px;
         }
+        .back-home-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #555;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
       </style>
     </head>
     <body>
@@ -85,8 +95,10 @@ if (!isset($_SESSION['admin_logged_in'])) {
           <input type="text" name="username" placeholder="Admin Username" required><br>
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
+          <a href="/" class = "back-home-button">← Back to Home Page</a>
         </form>
       </div>
+      
     </body>
     </html>
     <?php
