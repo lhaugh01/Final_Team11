@@ -6,38 +6,67 @@
 }
 
 body {
-  font-family: 'Courier New', Courier, monospace;
-  background-color: #f4f4f4;
-  color: #333;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0d0d0d; /* DARKER BACKGROUND */
+  color: #eee;
   line-height: 1.6;
 }
 
 /* Header & Footer */
 .site-header {
-  background-color: #141414;
+  background-color: #0a0a0a; /* darker header */
   color: #fff;
-  padding: 20px 0;
-  text-align: center;
-  border-bottom: 4px solid #e50914;
-}
-
-.site-header h1 {
-  font-size: 2.5em;
-  margin-bottom: 0.2em;
-}
-
-.site-header p {
-  font-size: 1.1em;
-  color: #ccc;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
 .site-footer {
-  background-color: #141414;
-  color: #ccc;
+  background-color: #0a0a0a;
+  color: #888;
   text-align: center;
   padding: 15px 0;
   margin-top: 40px;
   font-size: 0.9em;
+}
+
+/* Nav Bar */
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+  vertical-align: middle;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-btn {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: color 0.3s;
+}
+
+.nav-btn:hover {
+  color: #e50914;
 }
 
 /* Main Container */
@@ -63,24 +92,97 @@ body {
   max-width: 500px;
 }
 
-/* Form Elements */
+#searchBtn {
+  padding: 10px 20px;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#searchBtn:hover {
+  background-color: #c40611;
+}
+
+/* Inputs */
 input[type="text"],
 input[type="password"],
-input[type="email"] {
+input[type="email"],
+select {
   flex: 1;
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 5px;
+  background-color: rgba(30, 30, 30, 0.7); /* darker semi-transparent */
+  color: #eee;
+  font-size: 1em;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
-select {
-  padding: 10px;
-  width: 100%;
-  max-width: 500px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+input::placeholder {
+  color: #aaa;
+}
+
+input:focus, select:focus {
+  background-color: rgba(60, 60, 60, 0.8);
+  border-color: #e50914;
+  box-shadow: 0 0 8px #e50914;
+  outline: none;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  background-color: #000;
+  color: #fff;
+  height: 60vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(6px);
+  padding: 30px 40px;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.hero-btn, .hero-play-btn {
+  padding: 12px 24px;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.hero-btn:hover, .hero-play-btn:hover {
+  background-color: #c40611;
 }
 
 /* Movie Display */
@@ -93,23 +195,22 @@ select {
 .movie-card {
   display: flex;
   gap: 20px;
-  background: #fff;
+  background: #111;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   overflow: hidden;
-  transition: background 0.2s, transform 0.2s;
   padding: 10px;
   align-items: center;
+  transition: background 0.2s, transform 0.2s;
 }
 
 .movie-card:hover {
-  background: #f9f9f9;
+  background: #222;
   transform: scale(1.02);
 }
 
 .movie-card img {
   width: 100px;
-  height: auto;
   border-radius: 4px;
 }
 
@@ -127,7 +228,7 @@ select {
   margin: 5px 0;
 }
 
-/* Modals (Login / Signup / Movie) */
+/* Modals */
 .modal {
   display: none;
   position: fixed;
@@ -136,18 +237,18 @@ select {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0,0,0,0.9);
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: #121212;
+  color: #eee;
   margin: 5% auto;
   padding: 20px;
-  width: 90%;
-  max-width: 800px;
-  border-radius: 10px;
-  position: relative;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  width: 95%;
+  max-width: 1200px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.8);
   animation: fadeIn 0.5s;
 }
 
@@ -155,7 +256,6 @@ select {
   from { opacity: 0; transform: scale(0.8); }
   to { opacity: 1; transform: scale(1); }
 }
-
 
 .close-button {
   color: #aaa;
@@ -171,168 +271,17 @@ select {
   color: #e50914;
 }
 
-/* Login/Signup Forms */
-.login-form,
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.login-form h2,
-.signup-form h2 {
-  margin-bottom: 20px;
-  color: #141414;
-}
-
-.login-form input,
-.signup-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.login-form button,
-.signup-form button {
-  width: 100%;
-  padding: 12px;
-  background-color: #e50914;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-
-.login-form button:hover,
-.signup-form button:hover {
-  background-color: #c40611;
-}
-
-/* My Account Button */
-#myAccountBtn {
-  padding: 8px 16px;
-  background-color: #e50914;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-#myAccountBtn:hover {
-  background-color: #c40611;
-}
-
-/* Optional: Position it nicely on top right if you want */
-.auth-buttons {
-  text-align: center;
-  margin: 20px 0;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.form-group {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-/* Success and Error Messages */
-.message {
-  text-align: center;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-}
-
-.success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* Footer links */
-.form-footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 0.9em;
-}
-
-.form-footer a {
-  color: #e50914;
-  text-decoration: none;
-}
-
-.form-footer a:hover {
-  text-decoration: underline;
-}
-
-/* Buttons */
-#searchBtn,
-.login-btn,
-.signup-btn,
-.comment-btn {
-  padding: 10px 20px;
-  background-color: #e50914;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-#searchBtn:hover,
-.login-btn:hover,
-.signup-btn:hover,
-.comment-btn:hover {
-  background-color: #c40611;
-}
-
-/* Floating Login Button */
-.fixed-login-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-}
-
-/* Movie Modal (Popup Player) */
-.movie-modal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
+/* Fake Player */
 .fake-player {
-  width: 90%;
-  max-width: 960px;
-  height: 540px;
+  width: 100%;
+  max-width: 1100px;
+  height: 600px;
   background-color: #000;
   margin: 20px auto;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.9);
 }
 
 .play-icon {
@@ -342,31 +291,51 @@ select {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0.7;
+  opacity: 0.9;
   pointer-events: none;
 }
 
-.movie-details {
-  text-align: center;
-  margin-top: 20px;
+/* Other Buttons */
+.comment-btn, .login-btn, .signup-btn {
+  padding: 10px 20px;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.modal-poster {
-  width: 220px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+.comment-btn:hover, .login-btn:hover, .signup-btn:hover {
+  background-color: #c40611;
 }
 
-.movie-details h2 {
-  margin: 15px 0 10px;
-  font-size: 1.8em;
-  color: #141414;
+/* Account Tables */
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+  background-color: #111;
+  color: #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.7);
 }
 
-.movie-details p {
-  font-size: 1em;
-  margin-bottom: 15px;
-  color: #666;
-  padding: 0 20px;
+.account-table th, .account-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.account-table th {
+  background-color: #0a0a0a;
+  color: #e50914;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.account-table tr:hover {
+  background-color: #222;
 }

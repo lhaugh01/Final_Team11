@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <title>Login - NetView</title>
   <link rel="stylesheet" href="styles.css">
@@ -45,8 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <body>
 
 <header class="site-header">
-<h1><a href="index.html" style="text-decoration: none; color: inherit;">🎬 NetView</a></h1>
-  <p>Welcome back — sign in to explore movies</p>
+  <div style="padding-left: 20px;"> <!-- Shift logo slightly right -->
+    <a href="index.html" class="logo">
+      <img src="logo.png" alt="NetView Logo" class="logo-img">
+    </a>
+  </div>
+
+  
 </header>
 
 <div class="container">
@@ -76,6 +82,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
   </form>
 
 </div>
+
+<footer class="site-footer">
+  <p>&copy; 2025 NetView | Powered by TMDB API</p>
+</footer>
 
 </body>
 </html>

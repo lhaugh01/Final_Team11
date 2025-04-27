@@ -27,6 +27,7 @@ if (!empty($user['search_history_name'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <title>My Account - NetView</title>
   <link rel="stylesheet" href="styles.css">
@@ -34,39 +35,59 @@ if (!empty($user['search_history_name'])) {
 <body>
 
 <header class="site-header">
-<h1><a href="index.html" style="text-decoration: none; color: inherit;">🎬 NetView</a></h1>
-  <p>My Account</p>
+  <div class="nav-bar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo.png" alt="NetView Logo" class="logo-img">
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="account.php" class="nav-btn">My Account</a>
+      <a href="display_users.php" class="nav-btn">Admin</a>
+    </div>
+  </div>
 </header>
 
-<div class="container">
+<main class="container" style="text-align: center; margin-top: 30px;">
 
-  <h2 style="text-align:center; margin-bottom: 20px;">Welcome, <?php echo htmlspecialchars($user['user_id']); ?>!</h2>
+  <h2>Welcome, <?php echo htmlspecialchars($user['user_id']); ?>!</h2>
 
-  <div style="text-align:center; margin-bottom: 30px;">
+  <div style="margin: 20px 0;">
     <p><strong>Subscription:</strong> <?php echo htmlspecialchars(ucfirst($user['subscription_level'])); ?></p>
     <button onclick="logout()" class="login-btn" style="margin-top:20px;">Log Out</button>
   </div>
 
-  <div style="margin-top: 40px;">
+  <section style="margin-top: 40px;">
     <h3>🎬 Your Search History:</h3>
     <?php if (!empty($searchHistory)): ?>
-      <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
-        <?php foreach ($searchHistory as $movie): ?>
-          <li style="background: #fff; margin-bottom: 8px; padding: 10px; border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,0.1);">
-            <?php echo htmlspecialchars($movie); ?>
-          </li>
-        <?php endforeach; ?>
-      </ul>
+      <table class="account-table" style="margin-top:20px;">
+        <thead>
+          <tr>
+            <th>Movie Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($searchHistory as $movie): ?>
+            <tr>
+              <td><?php echo htmlspecialchars($movie); ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     <?php else: ?>
       <p style="margin-top:10px;">You haven't searched any movies yet.</p>
     <?php endif; ?>
-  </div>
+  </section>
 
-</div>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2025 NetView | Powered by TMDB API</p>
+</footer>
 
 <script>
 function logout() {
-    // Clear user info
     localStorage.removeItem('userId');
     window.location.href = 'logout.php';
 }

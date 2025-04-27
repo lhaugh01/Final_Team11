@@ -1,30 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="logo.png" type="image/png">
   <title>NetView - TMDB Movie Search</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="header-content">
-      <h1><a href="index.html" style="text-decoration: none; color: inherit;">🎬 NetView</a></h1>
-      <p>Engage with millions of authentic viewer comments</p>
-  
-      <div class="auth-buttons">
-        <a href="index.html" class="login-btn">Home</a>
-        <a href="account.php" class="login-btn">My Account</a>
-        <a href="login.php" class="login-btn">Log In</a>
-        <a href="signup.php" class="login-btn">Sign Up</a>
-        <a href="display_users.php" class="login-btn">Admin</a> 
-      </div>
+<header class="site-header">
+  <div class="nav-bar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo.png" alt="NetView Logo" class="logo-img">
+      </a>
     </div>
-  </header>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="account.php" class="nav-btn">My Account</a>
+      <a href="display_users.php" class="nav-btn">Admin</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <h1 id="heroTitle">Welcome to NetView</h1>
+    <button id="heroButton" class="hero-btn">Discover Movies</button>
+  </div>
+</section>
 
 <main class="container">
-  <h2 style="text-align:center;">Search Movies</h2>
+  <h2 style="text-align:center; margin-bottom: 20px;">Explore Movies</h2>
 
   <div class="search-controls">
     <div class="search-bar-group">

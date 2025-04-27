@@ -39,28 +39,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sign Up - NetView</title>
   <link rel="stylesheet" href="styles.css">
-  
 </head>
 <body>
 
 <header class="site-header">
-<h1><a href="index.html" style="text-decoration: none; color: inherit;">🎬 NetView</a></h1>
-  <p>Engage with movies and authentic comments</p>
+  <div style="padding-left: 20px;"> <!-- shifted logo right slightly -->
+    <a href="index.html" class="logo">
+      <img src="logo.png" alt="NetView Logo" class="logo-img">
+    </a>
+  </div>
+
+  
 </header>
 
 <div class="container">
 
   <?php if (!empty($signup_error)): ?>
-    <div class="message error"><?php echo $signup_error; ?></div>
+    <div class="message error"><?php echo htmlspecialchars($signup_error); ?></div>
   <?php endif; ?>
 
   <?php if (!empty($signup_success)): ?>
-    <div class="message success"><?php echo $signup_success; ?></div>
-    <a href="login.php" class="login-btn" style="margin-top:20px;">Go to Login</a>
+    <div class="message success"><?php echo htmlspecialchars($signup_success); ?></div>
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="login.php" class="login-btn">Go to Login</a>
+    </div>
   <?php endif; ?>
 
   <?php if (empty($signup_success)) : ?>
@@ -91,6 +98,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
   <?php endif; ?>
 
 </div>
+
+<footer class="site-footer">
+  <p>&copy; 2025 NetView | Powered by TMDB API</p>
+</footer>
 
 </body>
 </html>
