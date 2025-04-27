@@ -51,17 +51,18 @@ if (!empty($user['search_history_name'])) {
 
 <main class="container" style="text-align: center; margin-top: 30px;">
 
-  <h2>Welcome, <?php echo htmlspecialchars($user['user_id']); ?>!</h2>
+  <h2>Welcome Back <?php echo htmlspecialchars($user['user_id']); ?>!</h2>
 
   <div style="margin: 20px 0;">
-    <p><strong>Subscription:</strong> <?php echo htmlspecialchars(ucfirst($user['subscription_level'])); ?></p>
+    <p><strong>Subscription Tier:</strong> <?php echo htmlspecialchars(ucfirst($user['subscription_level'])); ?></p>
     <button onclick="logout()" class="login-btn" style="margin-top:20px;">Log Out</button>
   </div>
 
   <section style="margin-top: 40px;">
     <h3>🎬 Your Search History:</h3>
     <?php if (!empty($searchHistory)): ?>
-      <table class="account-table" style="margin-top:20px;">
+      <table class="account-table" style="margin-top:20px; margin-left:auto; margin-right:auto;">
+
         <thead>
           <tr>
             <th>Movie Title</th>
