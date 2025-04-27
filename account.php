@@ -55,7 +55,8 @@ if (!empty($user['search_history_name'])) {
 
   <div style="margin: 20px 0;">
     <p><strong>Subscription Tier:</strong> <?php echo htmlspecialchars(ucfirst($user['subscription_level'])); ?></p>
-    <button onclick="logout()" class="login-btn" style="margin-top:20px;">Log Out</button>
+      <button onclick="logout()" class="login-btn" style="margin-top:20px;">Log Out</button>
+    
   </div>
 
   <section style="margin-top: 40px;">
@@ -78,6 +79,23 @@ if (!empty($user['search_history_name'])) {
       </table>
     <?php else: ?>
       <p style="margin-top:10px;">You haven't searched any movies yet.</p>
+    <?php endif; ?>
+  </section>
+
+    <section style="margin-top: 40px;">
+    <h3>🎬 Your Comment History:</h3>
+    <?php if (!empty($searchHistory)): ?>
+      <table class="account-table" style="margin-top:20px; margin-left:auto; margin-right:auto;">
+        <tbody>
+          <?php foreach ($searchHistory as $movie): ?>
+            <tr>
+              <td><?php echo htmlspecialchars($movie); ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    <?php else: ?>
+      <p style="margin-top:10px;">You haven't made any comments yet.</p>
     <?php endif; ?>
   </section>
 
