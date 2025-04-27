@@ -74,15 +74,15 @@ if (!isset($_SESSION['admin_logged_in'])) {
           margin-bottom: 10px;
         }
         .back-home-button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #555;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
+          display: inline-block;
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #555;
+          color: white;
+          text-decoration: none;
+          border-radius: 5px;
+          transition: background-color 0.3s ease;
+        }
       </style>
     </head>
     <body>
@@ -95,19 +95,19 @@ if (!isset($_SESSION['admin_logged_in'])) {
           <input type="text" name="username" placeholder="Admin Username" required><br>
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
-          <a href="/" class = "back-home-button">← Back to Home Page</a>
+          <a href="/" class="back-home-button">← Back to Home Page</a>
         </form>
       </div>
-      
     </body>
     </html>
     <?php
     exit();
 }
 
-// Already logged in — Fetch user data
-require_once 'connection.php';
+// Admin was logged in — immediately destroy session to force logout on reload
+unset($_SESSION['admin_logged_in']);
 
+require_once 'connection.php';
 $sql = "SELECT * FROM users";
 $result = $conn->query($sql);
 ?>
@@ -172,7 +172,7 @@ $result = $conn->query($sql);
     <?php
     $fields = [];
     while ($fieldinfo = $result->fetch_field()) {
-      if ($fieldinfo->name !== 'password') { // Skip password column
+      if ($fieldinfo->name !== 'password') { // Hide password column
           $fields[] = $fieldinfo->name;
           echo "<th>" . htmlspecialchars($fieldinfo->name) . "</th>";
       }
@@ -185,12 +185,11 @@ $result = $conn->query($sql);
       <?php foreach ($fields as $fieldName): ?>
         <td>
           <?php
-            if ($row[$fieldName] !== null && $row[$fieldName] !== '') {
+            if (!empty($row[$fieldName])) {
               if ($fieldName === 'search_history_name' || $fieldName === 'search_history_id') {
-                // Split by comma and show each item on a new line
                 $items = explode(',', $row[$fieldName]);
                 foreach ($items as $item) {
-                    echo htmlspecialchars(trim($item)) . "<br>";
+                  echo htmlspecialchars(trim($item)) . "<br>";
                 }
               } else {
                 echo htmlspecialchars($row[$fieldName]);
@@ -203,7 +202,6 @@ $result = $conn->query($sql);
       <?php endforeach; ?>
     </tr>
   <?php endwhile; ?>
-
 </table>
 <?php else: ?>
   <p style="text-align: center;">No users found.</p>
