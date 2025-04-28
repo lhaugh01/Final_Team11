@@ -1,4 +1,3 @@
-// Main Movie App
 document.addEventListener('DOMContentLoaded', () => {
   const API_KEY = '4fd186b10fe65f080443247342f9cc5c';
   const BASE_URL = 'https://api.themoviedb.org/3';
@@ -51,11 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchMovies(query = '', genreId = '') {
     try {
       let url;
-      if (query) {
+      if (query && genreId) {
+        // Search by query and genre
+        url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
+      } else if (query) {
+        // Search only by query
         url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
       } else if (genreId) {
+        // Only category selected
         url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`;
       } else {
+        // Default: fetch popular trending
         url = `${BASE_URL}/trending/movie/day?api_key=${API_KEY}`;
       }
 
@@ -120,17 +125,21 @@ document.addEventListener('DOMContentLoaded', () => {
     movieModal.innerHTML = `
       <div class="modal-content movie-modal">
         <span class="close-button" id="closeMovieModal">&times;</span>
+
         <div class="modal-body" style="display: flex; flex-wrap: wrap; gap: 20px;">
           <div class="fake-player" style="flex: 2 1 600px;">
             <div class="play-icon">&#9658;</div>
           </div>
+
           <div class="comment-section" style="flex: 1 1 300px; background:#111; padding: 15px; border-radius:8px; overflow-y:auto; max-height:600px;">
             <h3 style="margin-bottom: 10px; color: #e50914;">Comments</h3>
-            <div id="commentList" style="margin-bottom: 15px;"><p>No comments yet. Be the first!</p></div>
-            <textarea id="newComment" placeholder="Write a comment..." style="width:100%; padding:8px; border-radius:6px; background:#222; color:#eee; border:none; margin-bottom:10px; resize:none;"></textarea>
+            <div id="commentList" style="margin-bottom: 15px;">
+            </div>
+            <textarea id="newComment" placeholder="Log in to write a comment!" style="width:100%; padding:8px; border-radius:6px; background:#222; color:#eee; border:none; margin-bottom:10px; resize:none;"></textarea>
             <button id="submitComment" class="comment-btn" style="width: 100%;">Submit</button>
           </div>
         </div>
+
         <div class="movie-details" style="text-align: center; margin-top: 20px;">
           <img src="${posterUrl}" alt="Movie Poster" class="modal-poster" />
           <h2>${movie.title}</h2>
@@ -141,30 +150,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
     movieModal.style.display = 'block';
 
-    const closeButton = document.getElementById('closeMovieModal');
-    if (closeButton) {
-      closeButton.onclick = () => movieModal.style.display = 'none';
-    }
+    document.getElementById('closeMovieModal').onclick = () => {
+      movieModal.style.display = 'none';
+    };
 
+    //TODO: MAKE IT SO THAT IF YOU ARE NOT LOGGED IN YOU CANNOT COMMENT.
     document.getElementById('submitComment').onclick = () => {
       const newCommentText = document.getElementById('newComment').value.trim();
       if (newCommentText) {
+        const result = insertNewComment(movie.id, newCommentText);
+        window.username = result.username;
+        if (!window.username){
+          alert("You must log in to leave a comment.");
+          return;
+        }
         const commentList = document.getElementById('commentList');
-        const newP = document.createElement('p');
-        newP.textContent = newCommentText;
-        commentList.appendChild(newP);
+        const newP1 = document.createElement('p');
+        newP1.textContent += 'user:';
+        newP1.textContent += window.username;
+        commentList.appendChild(newP1);
+        const newP2 = document.createElement('p');
+        newP2.textContent = newCommentText;
+        commentList.appendChild(newP2);
         document.getElementById('newComment').value = '';
       }
     };
+
+    getComments(movie.id);
 
     document.querySelector('.fake-player').addEventListener('click', () => {
       window.location.href = 'maintenance.html';
     });
   }
 
+  async function insertNewComment(movieid, comment) {
+    try {
+      const response = await fetch('insert_comment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ movieid, comment })
+      });
+
+      const result = await response.json();
+      return result;
+    } catch (err) {
+      console.error('Error inserting comment:', err);
+    }
+  }
+
+  // Get comments for a movie
+  async function getComments(movieid) {
+    try {
+      const response = await fetch(`get_comments.php?movieid=${parseInt(movieid)}`);
+      const data = await response.json();
+
+      commentList = document.getElementById('commentList');
+      if (data.success && Array.isArray(data.comments) && data.comments.length > 0) {
+        for (let i = 0; i < data.comments.length; i++) {
+          comment = data.comments[i];
+          const newP1 = document.createElement('p');
+          newP1.textContent += 'user: ';
+          newP1.textContent += comment.username;
+          commentList.appendChild(newP1);
+          const newP2 = document.createElement('p');
+          newP2.textContent = comment.comment;
+          commentList.appendChild(newP2);
+        } 
+      }else {
+        commentList.innerHTML = '<p>No comments yet. Be the first!</p>';
+      }
+    } catch (err) {
+      console.error('Error fetching comments:', err);
+      document.getElementById('commentList').innerHTML = '<p>Error loading comments.</p>';
+    }
+  }
+
   // --- Hero Banner ---
   function updateHeroBanner() {
     if (!heroMovies.length || !heroSection) return;
+
     const movie = heroMovies[heroIndex];
     const backgroundUrl = movie.backdrop_path
       ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
@@ -202,11 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 7000);
   }
 
-  // --- Save Search History ---
   async function updateSearchHistory(movieTitle, movieId) {
     try {
       const userId = localStorage.getItem('userId');
       if (!userId) return;
+
       await fetch('update_history.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -217,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Handle Search Submit ---
+  // --- Handle Search + Category Submit ---
   if (searchBtn) {
     searchBtn.addEventListener('click', () => {
       const query = searchInput.value.trim();
@@ -225,16 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchMovies(query, genreId);
     });
   }
-
-  // --- ESC Key Close Modal ---
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      const movieModal = document.getElementById('movieModal');
-      if (movieModal && movieModal.style.display === 'block') {
-        movieModal.style.display = 'none';
-      }
-    }
-  });
 
   // --- Load Everything ---
   fetchHeroMovies();
@@ -246,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
+
   if (hamburger && navLinks) {
     hamburger.addEventListener('click', () => {
       navLinks.classList.toggle('show');
