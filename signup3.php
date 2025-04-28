@@ -87,32 +87,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
   <title>Sign Up - NetView</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .credit-card-fields {
-      display: none;
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-top: 10px;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-    }
-    
-    .credit-card-fields h3 {
-      margin-top: 0;
-      margin-bottom: 15px;
-      font-size: 16px;
-      color: #333;
-    }
-  </style>
+
+.credit-card-fields {
+  display: none;
+  background-color: #111;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+  border: 1px solid #333;
+}
+
+.credit-card-fields h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #e50914;
+  text-align: center;
+}
+
+.credit-card-fields label {
+  color: #ccc;
+  font-weight: bold;
+}
+
+.credit-card-fields input[type="text"] {
+  background-color: #222;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.credit-card-fields input[type="text"]::placeholder {
+  color: #888;
+}
+
+.credit-card-fields input[type="text"]:focus {
+  background-color: #333;
+  border-color: #e50914;
+  outline: none;
+  box-shadow: 0 0 8px #e50914;
+}
+</style>
 </head>
 <body>
 
 <header class="site-header">
-  <div style="padding-left: 20px;">
-    <a href="index.html" class="logo">
-      <img src="logo.png" alt="NetView Logo" class="logo-img">
-    </a>
-  </div>
-</header>
+    <div class="nav-bar">
+      <div class="logo">
+        <a href="index.html">
+          <img src="logo.png" alt="NetView Logo">
+        </a>
+      </div>
+  
+      <!--mobile friendly -->
+      <div class="hamburger" id="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+  
+      <!--navigation links-->
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="about.html" class="nav-btn">About Us</a>
+        <a href="donate.html" class="nav-btn">Donate</a>
+        <a href="account.php" class="nav-btn">My Account</a>
+        <a href="display_users.php" class="nav-btn">Admin</a>
+      </div>
+    </div>
+  </header>
 
 <div class="container">
 
@@ -128,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
   <?php endif; ?>
 
   <?php if (empty($signup_success)) : ?>
-  <form method="POST" action="signup.php" class="signup-form" id="signupForm">
+  <form method="POST" action="signup3.php" class="signup-form" id="signupForm">
     <h2 style="text-align: center; margin-bottom: 20px;">Sign Up</h2>
 
     <div class="form-group">
@@ -155,6 +203,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
     </div>
 
     <div id="creditCardFields" class="credit-card-fields">
+    <p style="text-align: center; margin-bottom: 20px; color: #ccc;">
+      💳 You will be charged <strong style="color: #e50914;">$15/month</strong> for Golden benefits like commenting and exclusive features.
+    </p>
       <h3>Payment Information</h3>
       <div class="form-group">
         <label for="credit_card_number">Credit Card Number (16 digits)</label>
@@ -190,6 +241,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
 <footer class="site-footer">
   <p>&copy; 2025 NetView | Powered by TMDB API</p>
 </footer>
+
+<script src="hamburger.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

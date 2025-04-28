@@ -11,9 +11,9 @@ if (!isset($_SESSION['userId'])) {
   <meta charset="UTF-8">
   <title>Redirecting...</title>
   <script>
-    // Save userId into localStorage
+    //save userId into localStorage
     localStorage.setItem('userId', <?php echo json_encode($_SESSION['userId']); ?>);
-    window.location.href = 'index.html'; // Redirect after setting
+    window.location.href = 'index.html'; //redirect after setting
   </script>
 </head>
 <body>

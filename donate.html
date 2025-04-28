@@ -26,7 +26,13 @@
         <img src="logo.png" alt="NetView Logo">
       </a>
     </div>
-    <div class="nav-links">
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="nav-links" id="navLinks">
       <a href="index.html" class="nav-btn">Home</a>
       <a href="about.html" class="nav-btn">About Us</a>
       <a href="donate.html" class="nav-btn">Donate</a>
@@ -85,9 +91,9 @@
 <footer class="site-footer">
   <p>&copy; 2025 NetView | All Rights Reserved</p>
 </footer>
-
+<script src="hamburger.js"></script>
 <script>
-  // Format Card Number while typing
+  //format card cumber while typing
   const cardNumberInput = document.getElementById('cardNumber');
   cardNumberInput.addEventListener('input', (e) => {
     let value = e.target.value.replace(/\D/g, '').substring(0,16);
@@ -95,7 +101,7 @@
     e.target.value = formattedValue;
   });
 
-  // Format Expiry Date while typing
+  //format xxpiry date while typing
   const expiryDateInput = document.getElementById('expiryDate');
   expiryDateInput.addEventListener('input', (e) => {
     let value = e.target.value.replace(/\D/g, '').substring(0,4);
@@ -105,12 +111,12 @@
     e.target.value = value;
   });
 
-  // Handle Donation Form Submit
+  //donation form submit
   const donationForm = document.getElementById('donationForm');
   donationForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent reload
-    donationForm.style.display = 'none'; // Hide form
-    document.getElementById('thankYouMessage').style.display = 'block'; // Show thank you
+    e.preventDefault(); //prevent reload
+    donationForm.style.display = 'none'; //hide form
+    document.getElementById('thankYouMessage').style.display = 'block'; //show thank you
   });
 </script>
 

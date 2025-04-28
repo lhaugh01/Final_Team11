@@ -16,14 +16,14 @@
         </a>
       </div>
   
-      <!-- Hamburger Icon for Mobile -->
+      <!--mobile-friendly-->
       <div class="hamburger" id="hamburger">
         <div></div>
         <div></div>
         <div></div>
       </div>
   
-      <!-- Navigation Links -->
+      <!--navigations-->
       <div class="nav-links" id="navLinks">
         <a href="index.html" class="nav-btn">Home</a>
         <a href="about.html" class="nav-btn">About Us</a>
@@ -34,7 +34,7 @@
     </div>
   </header>
 
-<!-- Hero Section -->
+<!--hero movies display-->
 <section class="hero" id="hero">
   <div class="hero-content">
     <h1>Featured</h1>
@@ -63,7 +63,11 @@
 </footer>
 
 <div id="movieModal" class="modal"></div>
-
+<!--update user's subscription level on script.js-->
+<script>
+  const userSubscriptionLevel = "<?php echo strtolower($user['subscription_level'] ?? ''); ?>";
+  localStorage.setItem('subscriptionLevel', userSubscriptionLevel);
+  </script>
 <script src="script.js"></script>
 
 </body>

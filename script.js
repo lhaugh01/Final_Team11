@@ -1,5 +1,21 @@
-// Main Movie App
-document.addEventListener('DOMContentLoaded', () => {
+//main movie app
+
+async function refreshSubscriptionLevel() {
+  const userId = localStorage.getItem('userId');
+  if (!userId) return;
+
+  try {
+    const res = await fetch('get_subscription.php?userId=' + userId);
+    const data = await res.json();
+    if (data.subscription_level) {
+      localStorage.setItem('subscriptionLevel', data.subscription_level.toLowerCase());
+    }
+  } catch (err) {
+    console.error('Failed to refresh subscription level:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   const API_KEY = '4fd186b10fe65f080443247342f9cc5c';
   const BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -13,7 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let heroIndex = 0;
   let heroTimer;
 
-  // --- Fetch Hero Movies ---
+  await refreshSubscriptionLevel();
+
+  //fetch hero movies
   async function fetchHeroMovies() {
     try {
       const res = await fetch(`${BASE_URL}/trending/movie/day?api_key=${API_KEY}`);
@@ -28,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Fetch Genres for Category Dropdown ---
+  //fetch genres
   async function fetchGenres() {
     try {
       const res = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
@@ -47,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Fetch Movies based on Search + Category ---
+  //fetch movies
   async function fetchMovies(query = '', genreId = '') {
     try {
       let url;
@@ -90,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Movie Card Template ---
   function movieCardHTML(movie) {
     const posterPath = movie.poster_path
       ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
@@ -108,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // --- Open Movie Modal ---
   function openMovieModal(movie) {
     const movieModal = document.getElementById('movieModal');
     if (!movieModal) return;
@@ -116,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const posterUrl = movie.posterPath
       ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
       : 'https://via.placeholder.com/200x300?text=No+Image';
+
+    const subscriptionLevel = localStorage.getItem('subscriptionLevel');
 
     movieModal.innerHTML = `
       <div class="modal-content movie-modal">
@@ -126,9 +144,13 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="comment-section" style="flex: 1 1 300px; background:#111; padding: 15px; border-radius:8px; overflow-y:auto; max-height:600px;">
             <h3 style="margin-bottom: 10px; color: #e50914;">Comments</h3>
-            <div id="commentList" style="margin-bottom: 15px;"><p>No comments yet. Be the first!</p></div>
-            <textarea id="newComment" placeholder="Write a comment..." style="width:100%; padding:8px; border-radius:6px; background:#222; color:#eee; border:none; margin-bottom:10px; resize:none;"></textarea>
-            <button id="submitComment" class="comment-btn" style="width: 100%;">Submit</button>
+            <div id="commentList" style="margin-bottom: 15px;">Loading comments...</div>
+            ${subscriptionLevel === 'golden' ? `
+              <textarea id="newComment" placeholder="Write a comment..." style="width:100%; padding:8px; border-radius:6px; background:#222; color:#eee; border:none; margin-bottom:10px; resize:none;"></textarea>
+              <button id="submitComment" class="comment-btn" style="width: 100%;">Submit</button>
+            ` : `
+              <button id="upgradeBtn" class="signup-btn" style="width: 100%;">Upgrade to Golden to Comment</button>
+            `}
           </div>
         </div>
         <div class="movie-details" style="text-align: center; margin-top: 20px;">
@@ -141,28 +163,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
     movieModal.style.display = 'block';
 
-    const closeButton = document.getElementById('closeMovieModal');
-    if (closeButton) {
-      closeButton.onclick = () => movieModal.style.display = 'none';
-    }
+    document.getElementById('closeMovieModal').onclick = () => movieModal.style.display = 'none';
 
-    document.getElementById('submitComment').onclick = () => {
-      const newCommentText = document.getElementById('newComment').value.trim();
-      if (newCommentText) {
-        const commentList = document.getElementById('commentList');
-        const newP = document.createElement('p');
-        newP.textContent = newCommentText;
-        commentList.appendChild(newP);
+    if (subscriptionLevel === 'golden') {
+      document.getElementById('submitComment').onclick = async () => {
+        const newCommentText = document.getElementById('newComment').value.trim();
+        if (!newCommentText) return;
+        await submitComment(newCommentText, movie.id);
         document.getElementById('newComment').value = '';
-      }
-    };
+        fetchComments(movie.id);
+      };
+    } else {
+      document.getElementById('upgradeBtn').onclick = () => {
+        window.location.href = 'upgrade.php';
+      };
+    }
 
     document.querySelector('.fake-player').addEventListener('click', () => {
       window.location.href = 'maintenance.html';
     });
+
+    fetchComments(movie.id);
   }
 
-  // --- Hero Banner ---
+  async function fetchComments(movieId) {
+    try {
+      const res = await fetch(`fetch_comments.php?movieId=${movieId}`);
+      const comments = await res.json();
+      const commentList = document.getElementById('commentList');
+      commentList.innerHTML = '';
+
+      if (comments.length > 0) {
+        comments.forEach(comment => {
+          commentList.appendChild(renderComment(comment, movieId));
+        });
+      } else {
+        commentList.innerHTML = '<p>No comments yet. Be the first!</p>';
+      }
+    } catch (err) {
+      console.error('Failed to fetch comments:', err);
+    }
+  }
+
+  function renderComment(comment, movieId, depth = 0) {
+    const container = document.createElement('div');
+    container.style.marginLeft = `${depth * 20}px`;
+    container.style.marginBottom = '10px';
+    container.style.position = 'relative';
+
+    const text = document.createElement('p');
+    text.innerHTML = `
+      <strong>${comment.username}</strong>: ${comment.comment_text}
+      <span style="float:right; color:#999; font-size:0.8em;">${formatTimestamp(comment.created_at)}</span>
+    `;
+
+    const replyBtn = document.createElement('button');
+    replyBtn.textContent = 'Reply';
+    replyBtn.classList.add('comment-btn');
+    replyBtn.style.marginTop = '5px';
+    replyBtn.style.marginBottom = '5px';
+    replyBtn.style.fontSize = '0.8em';
+    replyBtn.onclick = () => {
+      const replyText = prompt('Write your reply:');
+      if (replyText && replyText.trim()) {
+        submitComment(replyText.trim(), movieId, comment.id).then(() => fetchComments(movieId));
+      }
+    };
+
+    container.appendChild(text);
+    container.appendChild(replyBtn);
+
+    if (comment.replies && comment.replies.length > 0) {
+      comment.replies.forEach(reply => {
+        container.appendChild(renderComment(reply, movieId, depth + 1));
+      });
+    }
+
+    return container;
+  }
+
+  function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  }
+
+  async function submitComment(text, movieId, parentId = null) {
+    try {
+      const res = await fetch('submit_comment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment: text, movieId, parentId })
+      });
+      const result = await res.json();
+      if (!result.success) {
+        alert(result.error || 'Failed to submit comment');
+      }
+    } catch (err) {
+      console.error('Failed to submit comment:', err);
+    }
+  }
+
   function updateHeroBanner() {
     if (!heroMovies.length || !heroSection) return;
     const movie = heroMovies[heroIndex];
@@ -183,8 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    const playButton = document.getElementById('heroPlayBtn');
-    playButton.onclick = () => {
+    document.getElementById('heroPlayBtn').onclick = () => {
       openMovieModal({
         title: movie.title,
         id: movie.id,
@@ -202,7 +301,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 7000);
   }
 
-  // --- Save Search History ---
   async function updateSearchHistory(movieTitle, movieId) {
     try {
       const userId = localStorage.getItem('userId');
@@ -217,7 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Handle Search Submit ---
   if (searchBtn) {
     searchBtn.addEventListener('click', () => {
       const query = searchInput.value.trim();
@@ -226,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- ESC Key Close Modal ---
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       const movieModal = document.getElementById('movieModal');
@@ -236,13 +332,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- Load Everything ---
   fetchHeroMovies();
   fetchGenres();
   fetchMovies();
 });
 
-// --- Mobile Navigation Toggle ---
+//mobile navigation toggle
 document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');

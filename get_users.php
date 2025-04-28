@@ -1,5 +1,5 @@
 <?php
-// get_users.php
+//get_users.php
 
 require_once 'connection_users.php';
 

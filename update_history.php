@@ -21,7 +21,7 @@ if (!$userId || !$movieTitle || !$movieId) {
     exit;
 }
 
-// Fetch current histories
+//fetch current histories
 $stmt = $conn->prepare("SELECT search_history_name, search_history_id FROM users WHERE id = ?");
 if (!$stmt) {
     http_response_code(500);
@@ -45,7 +45,7 @@ $historyId = $user['search_history_id'] ?? '';
 $updatedHistoryName = $historyName ? "$historyName,$movieTitle" : $movieTitle;
 $updatedHistoryId = $historyId ? "$historyId,$movieId" : $movieId;
 
-// Update histories
+//update histories
 $updateStmt = $conn->prepare("UPDATE users SET search_history_name = ?, search_history_id = ? WHERE id = ?");
 if (!$updateStmt) {
     http_response_code(500);
