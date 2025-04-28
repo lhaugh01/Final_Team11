@@ -1,5 +1,5 @@
 <?php
-// get_movie.php
+//get_movie.php
 
 require_once 'connection_movies.php';
 

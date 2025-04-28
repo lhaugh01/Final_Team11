@@ -2,7 +2,7 @@
 require_once 'connection.php';
 session_start();
 
-// Check if already logged in
+//check if already logged in
 if (isset($_SESSION['userId'])) {
     header('Location: redirect_after_login.php');
     exit();
@@ -51,14 +51,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         </a>
       </div>
   
-      <!-- Hamburger Icon for Mobile -->
+      <!--mobile friendly -->
       <div class="hamburger" id="hamburger">
         <div></div>
         <div></div>
         <div></div>
       </div>
   
-      <!-- Navigation Links -->
+      <!--navigation links-->
       <div class="nav-links" id="navLinks">
         <a href="index.html" class="nav-btn">Home</a>
         <a href="about.html" class="nav-btn">About Us</a>
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <button type="submit" name="login" class="login-btn">Log In</button>
 
     <div class="form-footer">
-      No account yet? <a href="signup.php">Sign Up</a>
+      No account yet? <a href="signup3.php">Sign Up</a>
     </div>
   </form>
 
@@ -100,6 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <footer class="site-footer">
   <p>&copy; 2025 NetView | Powered by TMDB API</p>
 </footer>
-
+<script src="hamburger.js"></script>
 </body>
 </html>

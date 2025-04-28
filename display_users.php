@@ -1,12 +1,11 @@
 <?php
-// display_users.php
 session_start();
 
-// Hardcoded admin credentials
+//hardcoded admin credentials
 $adminUser = 'admin1';
 $adminPass = 'admin1234';
 
-// If admin not logged in, check form
+//whenadmin not logged in check form
 if (!isset($_SESSION['admin_logged_in'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputUser = $_POST['username'] ?? '';
@@ -104,7 +103,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
-// Admin was logged in — immediately destroy session to force logout on reload
+//force logout on reload
 unset($_SESSION['admin_logged_in']);
 
 require_once 'connection.php';
@@ -172,7 +171,7 @@ $result = $conn->query($sql);
     <?php
     $fields = [];
     while ($fieldinfo = $result->fetch_field()) {
-      if ($fieldinfo->name !== 'password') { // Hide password column
+      if ($fieldinfo->name !== 'password') {
           $fields[] = $fieldinfo->name;
           echo "<th>" . htmlspecialchars($fieldinfo->name) . "</th>";
       }
