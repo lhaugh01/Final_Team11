@@ -48,14 +48,31 @@
 </head>
 <body>
 
-<header class="site-header">
-  <div class="logo">
-    <a href="index.html">
-      <img src="logo.png" alt="NetView Logo" class="logo-img">
-    </a>
-  </div>
+  <header class="site-header">
+    <div class="nav-bar">
+      <div class="logo">
+        <a href="index.html">
+          <img src="logo.png" alt="NetView Logo">
+        </a>
+      </div>
   
-</header>
+      <!--mobile-friendly-->
+      <div class="hamburger" id="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+  
+      <!--navigations-->
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="about.html" class="nav-btn">About Us</a>
+        <a href="donate.html" class="nav-btn">Donate</a>
+        <a href="account.php" class="nav-btn">My Account</a>
+        <a href="display_users.php" class="nav-btn">Admin</a>
+      </div>
+    </div>
+  </header>
 
 <div class="container maintenance-container">
   <h1>🚧 We're Under Maintenance</h1>
@@ -64,4 +81,6 @@
 </div>
 
 </body>
+
+<script src="script.js"></script>
 </html>
