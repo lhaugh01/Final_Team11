@@ -41,11 +41,14 @@ if (!empty($user['search_history_name'])) {
         <img src="logo.png" alt="NetView Logo" class="logo-img">
       </a>
     </div>
-    <div class="nav-links">
-      <a href="index.html" class="nav-btn">Home</a>
-      <a href="account.php" class="nav-btn">My Account</a>
-      <a href="display_users.php" class="nav-btn">Admin</a>
-    </div>
+    <!-- Navigation Links -->
+    <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="about.html" class="nav-btn">About Us</a>
+        <a href="donate.html" class="nav-btn">Donate</a>
+        <a href="account.php" class="nav-btn">My Account</a>
+        <a href="display_users.php" class="nav-btn">Admin</a>
+      </div>
   </div>
 </header>
 
