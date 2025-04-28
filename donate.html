@@ -6,14 +6,9 @@
   <title>Donate - NetView</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    /* Tiny extra improvement for inputs */
     #cardNumber, #expiryDate, #cvv, #donorName, #donationAmount {
       letter-spacing: 1px;
-    }
-    .thank-you {
-      text-align: center;
-      color: #4CAF50;
-      font-size: 1.5em;
-      margin-top: 40px;
     }
   </style>
 </head>
@@ -40,10 +35,10 @@
   <h2 style="text-align:center; margin-bottom: 20px;">Support NetView!</h2>
 
   <p style="text-align:center; max-width: 600px; margin: 0 auto 30px; color: #ccc; font-size: 1.1em;">
-   NetView is a community first epicenter for all movie lovers. Your donations help us cover server costs, website maintenance, and improvements. Thank you for supporting our mission both through engagement, donations, and subscriptions!
+    NetView is a non-profit website run by volunteers. Your donations help us cover server costs, website maintenance, and improvements. Thank you for supporting our mission!
   </p>
 
-  <form id="donationForm" style="max-width: 400px; margin: 0 auto; background-color: #111; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.6);">
+  <form style="max-width: 400px; margin: 0 auto; background-color: #111; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.6);">
     
     <div class="form-group" style="margin-bottom: 15px;">
       <label for="donorName" style="font-weight:bold;">Your Name</label>
@@ -75,10 +70,6 @@
     <button type="submit" class="signup-btn" style="width:100%; margin-top:10px;">Donate Now</button>
   </form>
 
-  <div id="thankYouMessage" class="thank-you" style="display: none;">
-    ❤️ Thank you for your generous donation! ❤️
-  </div>
-
   <p style="text-align:center; margin-top:30px; color:#ccc;">Every donation, big or small, makes a difference. Thank you!</p>
 </main>
 
@@ -103,14 +94,6 @@
       value = value.substring(0,2) + '/' + value.substring(2);
     }
     e.target.value = value;
-  });
-
-  // Handle Donation Form Submit
-  const donationForm = document.getElementById('donationForm');
-  donationForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent reload
-    donationForm.style.display = 'none'; // Hide form
-    document.getElementById('thankYouMessage').style.display = 'block'; // Show thank you
   });
 </script>
 

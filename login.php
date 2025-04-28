@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
             $_SESSION['userId'] = $user['id'];
+            $_SESSION['username'] = $user['user_id'];
             header('Location: redirect_after_login.php');
             exit;
         } else {
@@ -44,30 +45,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <body>
 
 <header class="site-header">
-    <div class="nav-bar">
-      <div class="logo">
-        <a href="index.html">
-          <img src="logo.png" alt="NetView Logo">
-        </a>
-      </div>
-  
-      <!-- Hamburger Icon for Mobile -->
-      <div class="hamburger" id="hamburger">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-  
-      <!-- Navigation Links -->
-      <div class="nav-links" id="navLinks">
-        <a href="index.html" class="nav-btn">Home</a>
-        <a href="about.html" class="nav-btn">About Us</a>
-        <a href="donate.html" class="nav-btn">Donate</a>
-        <a href="account.php" class="nav-btn">My Account</a>
-        <a href="display_users.php" class="nav-btn">Admin</a>
-      </div>
+  <div class="nav-bar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo.png" alt="NetView Logo" class="logo-img">
+      </a>
     </div>
-  </header>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="account.php" class="nav-btn">My Account</a>
+      <a href="display_users.php" class="nav-btn">Admin</a>
+    </div>
+  </div>
+</header>
 
 <div class="container" style="margin-top: 80px;">
 
